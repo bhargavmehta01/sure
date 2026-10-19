@@ -66,8 +66,9 @@
 
       <%# Split rows: one blank row, or the rows proposed from a receipt %>
       <%
+        precision = Money::Currency.new(@entry.currency).default_precision
+        amount_step = number_with_precision(BigDecimal(10)**-precision, precision: precision)
         rows = if @receipt_proposal
-          precision = Money::Currency.new(@entry.currency).default_precision
           @receipt_proposal.rows.map { |row| { name: row.name, amount: number_with_precision(-row.amount, precision: precision) } }
         else
           [ { name: @entry.name, amount: nil } ]
@@ -93,7 +94,7 @@
                 <input type="number"
                        name="split[splits][<%= index %>][amount]"
                        placeholder="0.00"
-                       step="0.01"
+                       step="<%= amount_step %>"
                        class="form-field__input border border-secondary rounded-md px-2.5 py-1.5 w-full text-sm text-primary bg-container"
                        required
                        autocomplete="off"
