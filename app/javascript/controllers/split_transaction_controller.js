@@ -2,7 +2,7 @@ import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
   static targets = ["rowsContainer", "row", "amountInput", "remaining", "remainingContainer", "error", "submitButton", "nameInput"]
-  static values = { total: Number, currency: String }
+  static values = { total: Number, currency: String, step: { type: String, default: "0.01" } }
 
   connect() {
     this.updateRemaining()
@@ -86,7 +86,7 @@ export default class extends Controller {
           <input type="number"
                  name="split[splits][${index}][amount]"
                  placeholder="0.00"
-                 step="0.01"
+                 step="${this.stepValue}"
                  class="form-field__input border border-secondary rounded-md px-2.5 py-1.5 w-full text-sm text-primary bg-container"
                  required
                  autocomplete="off"
