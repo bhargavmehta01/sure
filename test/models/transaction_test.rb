@@ -471,6 +471,13 @@ class TransactionTest < ActiveSupport::TestCase
     assert_nil transaction.activity_security
   end
 
+  test "activity_security falls back to a nested security id" do
+    security = securities(:aapl)
+    transaction = Transaction.new(extra: { "security" => { "id" => security.id } })
+
+    assert_equal security, transaction.activity_security
+  end
+
   test "activity_security refreshes when security metadata changes on the same instance" do
     transaction = Transaction.new(extra: { "security_id" => securities(:aapl).id })
 
